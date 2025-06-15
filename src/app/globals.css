@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Body için normal modlar */
+body {
+  @apply bg-white text-black;
+}
+
+html.dark body {
+  @apply bg-gray-900 text-white;
+}
+
+/* Fullscreen genel stil (light mod için) */
+:fullscreen,
+textarea:fullscreen,
+div:fullscreen {
+  width: 100vw;
+  height: 100vh;
+  background-color: white;
+  color: black;
+  z-index: 9999;
+  overflow: auto;
+}
+
+/* Fullscreen için dark mod override */
+html.dark :fullscreen,
+html.dark textarea:fullscreen,
+html.dark div:fullscreen {
+  background-color: #1a1a1a; /* koyu gri - tailwind bg-gray-900 benzeri */
+  color: #eee; /* açık yazı */
+}
