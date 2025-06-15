@@ -1,134 +1,58 @@
-# Case Study: Live Markdown Playground
+# 📝 Markdown Playground
 
-## 📄 Overview
-Build a **client‑only**, single‑page application where users write Markdown in an editor and view a live HTML preview. No servers or backend code—everything runs in the browser.
-
-**Why this exercise?**
-1. Evaluate proficiency with React Hooks and state management.  
-2. Test ability to integrate dynamic imports for performance.  
-3. Assess skill in persisting data using IndexedDB rather than `localStorage`.  
-4. Verify familiarity with Tailwind CSS for responsive design.
+Markdown Playground, Markdown dilinde içerik yazmanızı ve bu içeriğin HTML karşılığını anlık olarak önizlemenizi sağlayan bir web uygulamasıdır. Uygulama, örnek belgeler, tema geçişi, fullscreen modu ve tarayıcıda veri kalıcılığı gibi özelliklerle zenginleştirilmiştir.
 
 ---
 
-## 🎯 Objectives
-1. **Real‑time Markdown Rendering**  
-   - On each keystroke, convert `.md` to sanitized HTML and display in preview pane.  
-   - Ensure minimal latency and efficient reconciliation.
+## 🚀 Özellikler
 
-2. **Dynamic Parser Loading**  
-   - Use `React.lazy` or dynamic `import()` to load the Markdown parser (e.g., `remark` + `remark-html`) only when the editor mounts.  
-   - Confirm chunk splitting in your build.
+### ✅ Canlı Markdown Önizleme
+- Markdown yazarken anında HTML çıktısını sağ panelde görebilirsiniz.
+- `remark`, `rehype` ve `rehype-sanitize` kullanılarak güvenli HTML çıktısı oluşturulur.
 
-3. **Sample Documents**  
-   - Include three sample `.md` files (e.g., `intro.md`, `features.md`, `usage.md`) under `/src/samples/`.  
-   - Provide a dropdown or tabs UI to switch between them.
+### ✅ Örnek Markdown Belgeleri
+- intro, features ve usage adlarında 3 farklı örnek markdown dosyası mevcuttur.
+- Bu örnekleri üstteki seçim kutusuyla değiştirebilirsiniz.
 
-4. **Theme Toggle**  
-   - Offer light/dark styles via Tailwind’s `dark:` variants.  
-   - Persist theme selection in IndexedDB under a `settings` table.
+### ✅ Tema Desteği (Dark / Light Mode)
+- Dark ve Light modları arasında geçiş yapılabilir.
+- Seçilen tema IndexedDB ile kaydedilir, sayfa yenilense de korunur.
 
-5. **Last‑Document Persistence**  
-   - Store the current MD content in an IndexedDB `documents` table.  
-   - On page load, retrieve and display the last‑edited document.
+### ✅ Fullscreen Mod
+- Hem editör hem de önizleme paneli ayrı ayrı fullscreen moduna alınabilir.
+- `Escape` tuşu veya buton ile fullscreen'den çıkabilirsiniz.
+- Light ve dark modda fullscreen uyumludur.
 
-6. **Responsive Layout**  
-   - Side‑by‑side panes on desktop (≥768px).  
-   - Stacked editor above preview on mobile (<768px).
-
----
-
-## 🧰 Tech Stack & Key Patterns
-1. **React + TypeScript (v18+)**
-   - Functional components written in `.tsx` with Hooks (`useState`, `useEffect`, `useCallback`, `useMemo`).
-   - Define interfaces/types for component props, state, and hook data.
-   - Use proper typing for dynamic imports and external module declarations (e.g., Markdown parser types).
-
-2. **Dynamic Imports**
-   - `const { unified } = await import('unified');`
-   - `const remarkParse = await import('remark-parse');`
-   - Wrap in `useEffect` to defer loading until needed.
-
-3. **Dexie.js**
-   - Define a DB schema:
-     ```js
-     const db = new Dexie('MarkdownPlayground');
-     db.version(1).stores({
-       settings: '&key, value',
-       documents: 'id, content'
-     });
-     ```
-
-4. **Tailwind CSS**
-   - Utilize utility classes for spacing, typography, responsiveness.  
-   - Example class: `className="flex flex-col md:flex-row h-screen"
-
-5. **Security & Performance**
-   - Sanitize rendered HTML (e.g., `rehype-sanitize`).  
-   - Debounce rendering to avoid excessive parser calls.
-
-6. **Folder Structure (suggested)**
-   ```plaintext
-   src/
-   ├─ components/
-   ├─ Editor.tsx
-   ├─ Preview.tsx
-   ├─ ThemeToggle.tsx
-   └─ SampleSelector.tsx
-   hooks/
-   └─ useIndexedDB.ts
-
-   │  └─ useIndexedDB.js
-   ├─ samples/
-   │  ├─ intro.md
-   │  ├─ features.md
-   │  └─ usage.md
-   ├─ App.jsx
-   └─ index.css
-   ```
+### ✅ IndexedDB ile Kalıcılık
+- Yazdığınız Markdown içeriği otomatik olarak IndexedDB’ye kaydedilir.
+- Sayfayı yenileseniz bile son yazdığınız içerik geri yüklenir.
+- Tema ayarı da tarayıcıya kaydedilir.
 
 ---
 
-## 🚀 Deliverables
-1. **`<Editor />` & `<Preview />`**
-   - Real‑time Markdown editing + sanitized HTML preview.  
+## 🛠️ Kurulum
 
-2. **`<SampleSelector />`**
-   - Dropdown or tabbed UI to load `intro.md`, `features.md`, or `usage.md`.
+### Gereksinimler:
+- Node.js (18+)
+- npm veya yarn
 
-3. **`<ThemeToggle />`**
-   - Switch controlling `document.documentElement.classList` for `dark` mode.  
+### Kurulum ve Başlatma:
+npm install
+npm run dev
 
-4. **IndexedDB Persistence**
-   - Custom hook for saving/loading settings & documents.  
+Uygulama http://localhost:3000 adresinde çalışacaktır.
+🧩 Kullanılan Teknolojiler
+Next.js 
 
-5. **Build Config**
-   - Confirm dynamic import chunks in your production build.
+React 18
 
----
+Tailwind CSS – stil ve tema yönetimi
 
-## 🕹️ Evaluation Criteria
-| Criterion                   | What to Look For                              |
-|-----------------------------|-----------------------------------------------|
-| **Hooks & Re‑renders**      | Proper dependency arrays; minimal unnecessary updates |
-| **Dynamic Imports**         | Parser code split; no parser code in initial bundle |
-| **IndexedDB Usage**         | Robust CRUD; error handling; no `localStorage`    |
-| **Responsive CSS**          | Layout adapts at breakpoints; accessible fonts & colors |
-| **Code Organization**       | Logical folder structure; reusable components     |
+TypeScript – tip güvenliği
 
----
+remark / rehype – Markdown'dan HTML'e dönüşüm
 
-## 🎁 Bonus Criteria
-- **Custom Shortcuts**: Add keyboard shortcuts (e.g., `Ctrl+S` to save, `Ctrl+1/2/3` to switch samples).
-- **Fullscreen Mode**: Implement a button to toggle the editor or preview pane into fullscreen.
-- **Markdown Extensions**: Support at least one advanced Markdown extension (e.g., footnotes, tables, or task lists).
-- **Export HTML**: Provide a “Download HTML” button that serializes the preview pane content to an `.html` file.
-- **Accessibility Audit**: Include an ARIA‑friendly implementation and pass a basic Lighthouse accessibility check.
+IndexedDB – tarayıcıda içerik ve ayar kalıcılığı
 
-## 📤 Submission Instructions
-1. Push your code to a **public GitHub repo**.  
-2. Provide the repo link—**no ZIP files**.  
-3. Include a brief `README.md` explaining your approach, any trade‑offs, and how to run the app.  
-
-> ❗ **Reminder:** Using `localStorage` or sending a ZIP will **disqualify** your submission. No backend or API code.
-
+lodash.debounce – yazım sırasında debounce işlemi
+Kerem Yıldırım
